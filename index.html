@@ -154,7 +154,7 @@
       <div class="header">
         <div class="header-left">
           <div class="calendar-icon">
-            <img src="./calender.png" style="margin-top: 10px; width: 70px; height: auto; filter: brightness(0) saturate(100%) invert(40%) sepia(14%) saturate(2163%) hue-rotate(142deg) brightness(93%) contrast(94%);" />
+            <img src="calender-tainted.png" style="margin-top: 10px; width: 70px; height: auto;" />
           </div>
           <div>
             <div class="save-dates titles">SAVE THE DATES</div>
@@ -306,7 +306,7 @@
   <script>
     async function saveAsImage() {
       const container = document.querySelector('.outer-container');
-      
+
       try {
         const canvas = await html2canvas(container, {
           scale: 2, // For 200 DPI (96 * 2 = 192 DPI, close to 200)
