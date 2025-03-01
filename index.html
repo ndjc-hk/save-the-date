@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=900, initial-scale=1.0">
   <title>JCI North District - Save the Dates</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&family=Zen+Maru+Gothic&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic&display=swap" rel="stylesheet">
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
   <style>
     body {
@@ -15,7 +16,9 @@
       padding: 20px;
       background-color: #f5f5f5;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      min-width: 900px;
     }
 
     .titles {
@@ -27,8 +30,7 @@
     .outer-container {
       background-color: white;
       padding: 15px;
-      max-width: 900px;
-      width: 100%;
+      width: 900px;
     }
     
     .main-container {
@@ -132,24 +134,21 @@
       font-size: 1.2rem;
       margin-top: 5px;
     }
-    
-    @media (max-width: 768px) {
-      .event-row {
-        flex-direction: column;
-      }
-      
-      .date-box, .event-name, .event-location {
-        margin: 5px 0;
-      }
-      
-      .header {
-        flex-direction: column;
-        text-align: center;
-      }
-      
-      .header-left {
-        margin-bottom: 15px;
-      }
+
+    .save-image-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      background-color: #0a6e71;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .save-image-btn:hover {
+      background-color: #0a9b9f;
     }
   </style>
 </head>
@@ -318,5 +317,39 @@
 
     </div>
   </div>
+  <button class="save-image-btn" onclick="saveAsImage()">Save as Image</button>
+
+  <script>
+    async function saveAsImage() {
+      const container = document.querySelector('.outer-container');
+      
+      try {
+        const canvas = await html2canvas(container, {
+          scale: 2, // For 200 DPI (96 * 2 = 192 DPI, close to 200)
+          useCORS: true,
+          backgroundColor: null
+        });
+
+        // Convert to PNG and copy to clipboard
+        canvas.toBlob(async (blob) => {
+          try {
+            const item = new ClipboardItem({ "image/png": blob });
+            await navigator.clipboard.write([item]);
+            alert('Image copied to clipboard!');
+          } catch (err) {
+            console.error('Failed to copy to clipboard:', err);
+            // Fallback: Create download link
+            const link = document.createElement('a');
+            link.download = 'jci-calendar.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+          }
+        });
+      } catch (err) {
+        console.error('Error generating image:', err);
+        alert('Failed to generate image. Please try again.');
+      }
+    }
+  </script>
 </body>
 </html>
